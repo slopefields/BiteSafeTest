@@ -79,7 +79,7 @@ export default function SignUpScreen({ navigation }) {
                     <Text style={styles.label}>Password</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="Min. 8 characters"
+                        placeholder="Min. 6 characters"
                         placeholderTextColor="#a7a7a7"
                         secureTextEntry
                         value={password}
