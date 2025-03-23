@@ -34,7 +34,7 @@ const SearchBar = () => {
         value={text}
         onSubmitEditing={fetchInput}
       />
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={[styles.scrollContainer, { paddingBottom: 200 }]} showsVerticalScrollIndicator={false}>
         {restaurantInfo.restaurantNames.map((restaurant, index) => (
           <View key={index} style={styles.resultContainer}>
             <RestaurantRowButton
@@ -52,11 +52,12 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     paddingHorizontal: 16,
+    marginBottom: 5, // Add a small consistent margin here
   },
   input: {
-    marginBottom: 20,  
+    // Remove the marginBottom from here
     backgroundColor: '#d9d9d9',
-    borderRadius: 30,  // This rounds the corners of the input field
+    borderRadius: 30,
     paddingVertical: 16,
     paddingHorizontal: 20,
     width: '100%',
@@ -64,10 +65,10 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   scrollContainer: {
-    paddingBottom: 20,  
+    paddingBottom: 20,
   },
   resultContainer: {
-    marginBottom: 15,  
+    marginBottom: 15,
   },
   restaurantCard: {
     flexDirection: 'row',

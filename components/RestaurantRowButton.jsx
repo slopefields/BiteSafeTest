@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';  // Ensure StyleSheet is imported here
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 
 const RestaurantRowButton = ({ restaurant, restaurantAddress }) => {
   return (
     <TouchableOpacity style={styles.restaurantCard}>
-      <Image 
-        source={restaurant.image ? { uri: restaurant.image } : require('../assets/Placeholder.png')} 
-        style={styles.restaurantImage} 
+      <Image
+        source={restaurant.image ? { uri: restaurant.image } : require('../assets/Placeholder.png')}
+        style={styles.restaurantImage}
       />
       <View style={styles.restaurantInfo}>
         <Text style={styles.restaurantName}>{restaurant.name}</Text>
@@ -19,31 +19,32 @@ const RestaurantRowButton = ({ restaurant, restaurantAddress }) => {
 const styles = StyleSheet.create({
   restaurantCard: {
     flexDirection: 'row',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#fff',
     borderRadius: 30,
-    marginBottom: 5,
-    paddingVertical: 5,
-    paddingHorizontal: 16,
+    padding: 16,
+    marginBottom: 20,
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    width: '105%',
-    marginLeft: '-2.5%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 2,
+    elevation: 6,
   },
   restaurantImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 8,
-    marginRight: 16,
+    width: 110,
+    height: 110,
+    borderRadius: 20,
+    marginRight: 20,
   },
   restaurantInfo: {
     flex: 1,
   },
   restaurantName: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
   },
   restaurantAddress: {
-    fontSize: 14,
+    fontSize: 18,
     color: '#666',
   },
 });

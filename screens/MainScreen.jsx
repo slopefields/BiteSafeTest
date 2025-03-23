@@ -52,9 +52,15 @@ const styles = StyleSheet.create({
     navbar: {
         flexDirection: 'row',
         backgroundColor: '#55d684',
-        height: 60,
+        height: 90,
         justifyContent: 'space-around',
         alignItems: 'center',
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        left: 0,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
     },
     navButton: {
         padding: 10,

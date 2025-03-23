@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function ConnectingScreen({ navigation }) {
@@ -14,11 +14,19 @@ export default function ConnectingScreen({ navigation }) {
                     </View>
                 </View>
                 <Text style={styles.connectingText}>Connecting...</Text>
+                <Image
+                    source={require('../assets/connecting-image.png')}
+                    style={styles.image}
+                    resizeMode="contain"
+                />
             </View>
 
-            <View style={styles.bottomNav}>
+
+
+
+            <View style={styles.navbar}>
                 <TouchableOpacity style={styles.navButton}>
-                    <Ionicons name="square-outline" size={24} color="white" />
+                    <Ionicons name="camera" size={24} color="white" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Main')}>
                     <Ionicons name="search" size={24} color="white" />
@@ -67,14 +75,25 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#000000',
     },
-    bottomNav: {
+    navbar: {
         flexDirection: 'row',
         backgroundColor: '#55d684',
-        height: 60,
+        height: 90,
         justifyContent: 'space-around',
         alignItems: 'center',
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        left: 0,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
     },
     navButton: {
         padding: 10,
+    },
+    image: {
+        width: 300,
+        height: 300,
+        marginTop: 50, // Adjust this value to move the image lower
     },
 });
