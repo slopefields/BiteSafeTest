@@ -7,18 +7,20 @@ import {
     TouchableOpacity,
     Image,
     ScrollView,
-    SafeAreaView
+    SafeAreaView,
+    Modal
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { AntDesign } from '@expo/vector-icons';
+import { signUp } from '../services/authServices.js';
+import { Alert } from 'react-native';
 
 export default function SignUpScreen({ navigation }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [selectedAllergies, setSelectedAllergies] = useState([]);
-    const [showPicker, setShowPicker] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     const allergies = [
-        'None',
         'Shellfish',
         'Fish',
         'Nuts',
@@ -28,11 +30,29 @@ export default function SignUpScreen({ navigation }) {
         'Eggs'
     ];
 
-    const handleSignUp = () => {
-        // Handle sign up logic here
-        // Then navigate to the next screen
-        navigation.navigate('Home');
+    const toggleAllergySelection = (item) => {
+        if (selectedAllergies.includes(item)) {
+            setSelectedAllergies(selectedAllergies.filter(allergy => allergy !== item));
+        } else {
+            setSelectedAllergies([...selectedAllergies, item]);
+        }
     };
+
+    const handleSignUp = async () => {
+        if (!username || !password) {
+            Alert.alert("Error", "Username and password are required.");
+            return;
+        }
+        const user = await signUp(username, password, selectedAllergies);
+        if (user) {
+            Alert.alert("Success", "Account created successfully!", [
+                { text: "OK", onPress: () => navigation.navigate('Welcome') }
+            ]);
+        } else {
+            Alert.alert("Sign-up Failed", "Please try again.");
+        }
+        console.log("DONE")
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -69,7 +89,7 @@ export default function SignUpScreen({ navigation }) {
                     <Text style={styles.label}>Allergies</Text>
                     <TouchableOpacity
                         style={styles.pickerButton}
-                        onPress={() => setShowPicker(!showPicker)}
+                        onPress={() => setShowModal(true)}
                     >
                         <Text style={styles.pickerButtonText}>
                             {selectedAllergies.length > 0 ? selectedAllergies.join(', ') : 'Select Your Allergies'}
@@ -77,22 +97,40 @@ export default function SignUpScreen({ navigation }) {
                         <Text style={styles.dropdownIcon}>▼</Text>
                     </TouchableOpacity>
 
-                    {showPicker && (
-                        <View style={styles.pickerContainer}>
-                            <Picker
-                                selectedValue={selectedAllergy}
-                                onValueChange={(itemValue) => {
-                                    setSelectedAllergy(itemValue);
-                                    setShowPicker(false);
-                                }}
-                            >
-                                <Picker.Item label="Select Your Allergies" value="" />
+                    {/* MODAL FOR MULTI-SELECTION */}
+                    <Modal
+                        transparent
+                        animationType="fade"
+                        visible={showModal}
+                        onRequestClose={() => setShowModal(false)}
+                    >
+                        <View style={styles.modalOverlay}>
+                            <View style={styles.modalContainer}>
+                                <Text style={styles.modalTitle}>Select Allergies</Text>
                                 {allergies.map((allergy, index) => (
-                                    <Picker.Item key={index} label={allergy} value={allergy} />
+                                    <TouchableOpacity
+                                        key={index}
+                                        style={styles.checkboxContainer}
+                                        onPress={() => toggleAllergySelection(allergy)}
+                                    >
+                                        <AntDesign
+                                            name={selectedAllergies.includes(allergy) ? "checksquare" : "checksquareo"}
+                                            size={24}
+                                            color={selectedAllergies.includes(allergy) ? "#55d684" : "#a7a7a7"}
+                                        />
+                                        <Text style={styles.checkboxLabel}>{allergy}</Text>
+                                    </TouchableOpacity>
                                 ))}
-                            </Picker>
+
+                                <TouchableOpacity
+                                    style={styles.modalCloseButton}
+                                    onPress={() => setShowModal(false)}
+                                >
+                                    <Text style={styles.modalCloseButtonText}>Done</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    )}
+                    </Modal>
 
                     <TouchableOpacity
                         style={styles.signUpButton}
@@ -166,12 +204,47 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#a7a7a7',
     },
-    pickerContainer: {
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContainer: {
         backgroundColor: '#ffffff',
-        borderWidth: 1,
-        borderColor: '#d9d9d9',
+        width: '80%',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center',
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+        width: '100%',
+    },
+    checkboxLabel: {
+        fontSize: 18,
+        marginLeft: 10,
+        color: '#000000',
+    },
+    modalCloseButton: {
+        backgroundColor: '#55d684',
         borderRadius: 8,
-        marginTop: 4,
+        padding: 12,
+        marginTop: 20,
+        width: '100%',
+        alignItems: 'center',
+    },
+    modalCloseButtonText: {
+        fontSize: 16,
+        color: '#ffffff',
+        fontWeight: 'bold',
     },
     signUpButton: {
         backgroundColor: '#55d684',
@@ -187,3 +260,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
+
