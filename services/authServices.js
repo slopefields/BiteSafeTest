@@ -29,7 +29,7 @@ export const signIn = async (username, password) => {
         password
     });
     if (error) {
-        console.error('Sign In Error: ', error.message);
+        console.error('Error logging in: ', error.message);
         return null;
     }
     return data.user;

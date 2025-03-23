@@ -10,10 +10,26 @@ import {
     KeyboardAvoidingView,
     Platform
 } from 'react-native';
+import { signIn } from '../services/authServices.js';
+import { Alert, ActivityIndicator } from 'react-native';
 
 export default function LoginScreen({ navigation }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+
+
+    const handleLogin = async () => {
+        setLoading(true);
+        const user = await signIn(username, password);
+        setLoading(false);
+
+        if (user) {
+            navigation.navigate('Main');
+        } else {
+            Alert.alert("Login failed", "Please try again.");
+        }
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -55,11 +71,14 @@ export default function LoginScreen({ navigation }) {
 
                         <TouchableOpacity
                             style={styles.loginButton}
-                            onPress={() => {
-                                navigation.navigate('Main');
-                            }}
+                            onPress={handleLogin}
+                            disabled={loading} // Disable button while loading
                         >
-                            <Text style={styles.loginButtonText}>Login</Text>
+                            {loading ? (
+                                <ActivityIndicator size="small" color="#ffffff" />
+                            ) : (
+                                <Text style={styles.loginButtonText}>Login</Text>
+                            )}
                         </TouchableOpacity>
 
                         <View style={styles.registerContainer}>
